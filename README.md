@@ -11,6 +11,18 @@ Install required libraries
 ```
 pip install virtualenv
 ```
+### LIRC Setup
+Follow steps to setup LIRC for Buster
+```
+https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=235256
+```
+Run command to generate mode2 file:
+```
+mode2 -d /dev/lirc1  -m > test.mode2
+```
+Aim remote at RPi and Ctrl+C once done
+
+
 
 ## Setup
 ### Workspace Creation 
