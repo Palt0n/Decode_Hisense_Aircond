@@ -41,7 +41,7 @@ class ClassMode2Raw:
     def get_binary(self):
         list_values_x = []
         for value in self.get_values():
-            if (value > Average_Y_for_X_1 - 150) and (value < Average_Y_for_X_1 + 150):
+            if (value > Average_Y_for_X_1 - 200) and (value < Average_Y_for_X_1 + 200):
                 list_values_x.append("0")
             elif (value > Average_Y_for_X_2 - 100) and (value < Average_Y_for_X_2 + 100):
                 list_values_x.append("1")
