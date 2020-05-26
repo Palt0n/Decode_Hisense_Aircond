@@ -5,6 +5,8 @@ Average_Y_for_X_2 = 1620
 Average_Y_for_X_8 = 7900
 
 By fitting the values to a linear equation.
+
+source env/Scripts/activate
 """
 import matplotlib.pyplot as plt 
 import numpy as np

@@ -1,6 +1,7 @@
 """
 Returns binary code from parsing the LIRC mode2 output
 
+source env/Scripts/activate
 python parse_mode2.py Hisense_Aircond_Power.mode2.example
 """
 import argparse
@@ -41,15 +42,21 @@ class ClassMode2Raw:
     def get_binary(self):
         list_values_x = []
         for value in self.get_values():
-            if (value > Average_Y_for_X_1 - 200) and (value < Average_Y_for_X_1 + 200):
+            if (value > Average_Y_for_X_1 - 250) and (value < Average_Y_for_X_1 + 250):
                 list_values_x.append("0")
-            elif (value > Average_Y_for_X_2 - 100) and (value < Average_Y_for_X_2 + 100):
+            elif (value > Average_Y_for_X_2 - 150) and (value < Average_Y_for_X_2 + 150):
                 list_values_x.append("1")
             elif (value > Average_Y_for_X_8 - 100) and (value < Average_Y_for_X_8 + 100):
                 list_values_x.append("X")
             else:
                 raise ValueError("Value: {} doesn't match any conditions".format(value))
         return "".join(list_values_x)
+
+    def get_binary_encoded(self):
+        """
+        Get pulse length encoded
+        """
+        return self.get_binary()[1::2]
 
 
     def __str__(self):
@@ -89,5 +96,5 @@ with open(args.path) as fh:
 list_values = []
 for raw in list_raw:
     binary = raw.get_binary()
-    print("{} = {}".format(raw.head, raw.get_binary()))
+    print("{} = {}".format(raw.head, raw.get_binary_encoded()))
 
