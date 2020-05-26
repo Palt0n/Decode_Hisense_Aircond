@@ -91,8 +91,7 @@ python parse_mode2.py Hisense_Aircond_Power.mode2.example
 pip freeze > requirements.txt
 ```
 
-
-
+Aircond uses LRC to calculate its Checksum
 ```
 XX = Checksum,00000000,0000----,00000000,00000000,0000----,00000000,X,Checksum,00000000,00000000,00000000,00000000,00000000,--------,--------,X,00000000,00000000,Temp----,--------,00000110,10000011
 
