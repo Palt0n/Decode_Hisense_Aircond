@@ -27,9 +27,11 @@ while True:
 
 		if n % 4 == 0:
 			print()
-			print("        ", end = '')
+			# print("        ", end = '')
+			print("        ")
 
-		print (words[1], "  ", end = '')
+		# print (words[1], "  ", end = '')
+		print(words[1])
 		n = n+1
 
 	print()
