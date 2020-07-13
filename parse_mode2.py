@@ -47,10 +47,28 @@ class ClassMode2Raw:
             elif (value > Average_Y_for_X_2 - 150) and (value < Average_Y_for_X_2 + 150):
                 list_values_x.append("1")
             elif (value > Average_Y_for_X_8 - 100) and (value < Average_Y_for_X_8 + 100):
-                list_values_x.append("X")
+                list_values_x.append("8")
             else:
                 raise ValueError("Value: {} doesn't match any conditions".format(value))
         return "".join(list_values_x)
+    
+    def get_list_pulse(self):
+        list_pulse = []
+        string_bit = self.get_binary()
+        count_bit = 0
+        for bit in string_bit:
+            bit = string_bit[count_bit]
+            count_bit += 1
+            if bit == "0":
+                pulse = Average_Y_for_X_1
+            elif bit == "1":
+                pulse = Average_Y_for_X_2
+            elif bit == "8":
+                pulse = Average_Y_for_X_8
+            else:
+                raise ValueError("Expected 0,1,8 not {} {}".format(bit, type(bit)))
+            list_pulse.append(pulse)
+        return list_pulse
 
     def get_binary_encoded(self):
         """
@@ -62,7 +80,7 @@ class ClassMode2Raw:
         # return self.get_binary()
     
     def is_ok(self):
-        return len(self.get_binary_encoded() == 170)
+        return len(self.get_binary_encoded()) == 170
 
     def __str__(self):
         return "{} [ {} ]".format(self.head, ", ".join(self.body))
@@ -81,6 +99,41 @@ class ClassMode2Raw:
         body = list_values
         return cls(head, body)
 
+    def generate_conf(self):
+        """
+        irsend SEND_ONCE MY_REMOTE MY_TEST
+        """
+        list_pulse = self.get_list_pulse()
+        list_pulse = [9000, 4470] + list_pulse
+        list_line_pulse = []
+        for i in range(0, len(list_pulse), 6):
+            sublist_pulse = list_pulse[i:i + 6]
+            list_string_pulse = []
+            for pulse in sublist_pulse:
+                string_pulse = "{:9}".format(pulse)
+                list_string_pulse.append(string_pulse)
+            list_line_pulse.append("".join(list_string_pulse))
+        string_line_pulse = "\n".join(list_line_pulse)
+        template = """begin remote
+
+   name  MY_REMOTE
+   flags RAW_CODES
+   eps            30
+   aeps          100
+
+  ptrail          0
+  repeat     0     0
+  gap    107325
+
+       begin raw_codes
+
+           name MY_TEST
+{raw_code}
+
+    end raw_codes
+end remote""".format(raw_code=string_line_pulse)
+
+        return template
 list_raw = []
 with open(args.path) as fh:
     while True:
@@ -108,4 +161,6 @@ list_values = []
 for raw in list_raw:
     binary = raw.get_binary()
     print("{} = {}".format(raw.head, raw.get_binary_encoded()))
+    if raw.is_ok():
+        print(raw.generate_conf())
 

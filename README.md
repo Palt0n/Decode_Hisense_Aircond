@@ -85,6 +85,15 @@ Once good values are obtain, edit `parse_mode2.py` with the new values and run:
 python parse_mode2.py Hisense_Aircond_Power.mode2.example
 ```
 
+Run command to store conf file:
+```
+irrecord -a test2.lirc.conf
+sudo lircd --device /dev/lirc0 --driver devinput
+sudo lircd --device /dev/lirc0
+sudo cp test2.mode2 /etc/lirc/lircd.conf.d/test.conf
+sudo /etc/init.d/lirc restart
+```
+
 ## Developer Misc
 ### Create requirements.txt file
 ```
@@ -141,4 +150,23 @@ ________________________________________________________________________________
 
 
 
+```
+
+
+
+
+```
+pi@raspberrypi:~ $ irsend SEND_ONCE MY_REMOTE MY_TEST
+do_connect: could not connect to socket
+connect: No such file or directory
+```
+
+```
+sudo systemctl start lircd.service
+sudo systemctl status lircd.service
+
+sudo systemctl restart lircd && irsend SEND_ONCE MY_REMOTE MY_TEST2
+sudo rm /etc/lirc/lircd.conf.d/test.conf && sudo nano /etc/lirc/lircd.conf.d/test.conf
+
+while(exit 0); do irsend SEND_ONCE MY_REMOTE MY_TEST2; sleep 1;done
 ```
